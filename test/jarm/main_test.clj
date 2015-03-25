@@ -1,6 +1,6 @@
-(ns jarm.core-test
+(ns jarm.main-test
   (:require [clojure.test :refer :all]
-            [jarm.core :refer :all]))
+            [jarm.main :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
