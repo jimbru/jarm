@@ -1,10 +1,16 @@
 (ns jarm.main
   (:require [clojure.string :as string]
-            [clojure.tools.cli :as cli])
+            [clojure.tools.cli :as cli]
+            [jarm.actions :as actions]
+            [me.raynes.fs :as fs])
   (:gen-class))
 
+(defonce default-repository "/usr/local/lib/jar")
+
 (def cli-opts
-  [["-h" "--help"]])
+  [["-h" "--help"]
+   ["-r" "--repository <path>" "Repository directory path."
+    :default default-repository]])
 
 (defn usage [opts-summary]
   (->> ["JAR Manager"
@@ -15,8 +21,7 @@
         opts-summary
         ""
         "Actions:"
-        "  thing        Do a thing."
-        "  other-thing  Do a different thing."
+        "  list    List installed JARs."
         ""
         "Refer to the man page for more info."]
        (string/join \newline)))
@@ -32,12 +37,11 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (let [{:keys [options arguments errors summary]} (cli/parse-opts args cli-opts)]
+  (let [{:keys [options arguments errors summary]}
+        (cli/parse-opts args cli-opts :in-order true)]
     (cond
       (:help options) (exit 0 (usage summary))
-      (not= (count arguments) 1) (exit 1 (usage summary))
       errors (exit 1 (error-msg errors)))
     (case (first arguments)
-      "thing" (println ">> Thing!")
-      "another-thing" (println ">> Another Thing!")
-      (exit 1 (usage summary)))))
+      "list" (actions/list options arguments)
+      (exit 1 "Unknown action. Run 'jarm -h' for help."))))
