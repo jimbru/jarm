@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [nth])
   (:require [clojure.set :refer [union]]
             [clojure.string :as string]
-            [ext.core :refer [nth]]
+            [ext.core :refer [nth update-in-default]]
             [me.raynes.fs :as fs])
   (:import java.util.regex.Pattern))
 
@@ -32,4 +32,6 @@
   (let [root-dir-norm (normalize-path root-dir)
         jars (fs/find-files root-dir-norm #".*\.jar")
         coords (map (partial jar->coordinate root-dir-norm) jars)]
-    (reduce #(update-in %1 (subvec %2 0 2) union #{(last %2)}) {} coords)))
+    (reduce #(update-in-default %1 sorted-map (subvec %2 0 2) union #{(last %2)})
+            (sorted-map)
+            coords)))
