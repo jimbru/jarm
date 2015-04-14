@@ -1,8 +1,9 @@
 (ns jarm.actions
   (:refer-clojure :exclude [list])
-  (:require [clojure.pprint :refer [pprint]]
+  (:require [clojure.string :as string]
             [jarm.repository :as repository]))
 
 (defn list [ctx args]
-  (let [repo (repository/read-from-filesystem (:repository ctx))]
-    (pprint repo)))
+  (let [repo (repository/read-from-filesystem (:repository ctx))
+        all (mapcat (fn [g] (map #(str (key g) "/" (key %)) (val g))) repo)]
+    (println (string/join \newline all))))
