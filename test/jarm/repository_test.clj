@@ -7,7 +7,8 @@
 (def test-repo-result
   {"animal"       {"cat" #{"1.0.0"}
                    "dog" #{"1.2.0" "1.2.10"}}
-   "plant"        {"plant" #{"2.0.1"}}
+   "plant"        {"fern" #{"5.4.0"}
+                   "plant" #{"2.0.1"}}
    "plant.flower" {"rose" #{"1.0.0"}}})
 
 (deftest read-from-filesystem-test
