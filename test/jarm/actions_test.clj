@@ -6,11 +6,11 @@
 (def test-repo-directory "./test/.repository")
 
 (def test-repo-list
-  (->> ["animal/cat"
-        "animal/dog"
-        "plant"
-        "plant/fern"
-        "plant.flower/rose"
+  (->> ["animal/cat (1.0.0)"
+        "animal/dog (1.2.10)"
+        "plant (2.0.1)"
+        "plant/fern (5.4.0)"
+        "plant.flower/rose (1.0.0)"
         ""]
        (string/join \newline)))
 
