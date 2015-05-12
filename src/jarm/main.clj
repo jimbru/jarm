@@ -13,7 +13,7 @@
     :default default-repository]])
 
 (defn usage [opts-summary]
-  (->> ["JAR Manager"
+  (->> ["Jar Manager"
         ""
         "Usage: jarm [options] action"
         ""
@@ -21,7 +21,8 @@
         opts-summary
         ""
         "Actions:"
-        "  list    List installed JARs."
+        "  list    List installed jars."
+        "  show    Show information about an installed jar."
         ""
         "Refer to the man page for more info."]
        (string/join \newline)))
@@ -44,4 +45,5 @@
       errors (exit 1 (error-msg errors)))
     (case (first arguments)
       "list" (actions/list options arguments)
+      "show" (actions/show options arguments)
       (exit 1 "Unknown action. Run 'jarm -h' for help."))))

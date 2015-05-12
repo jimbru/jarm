@@ -24,3 +24,31 @@
   (let [repo (repository/read-from-filesystem (:repository ctx))
         results (mapcat group->coordinates repo)]
     (println (string/join \newline results))))
+
+(defn- parse-coordinate
+  "Uses Leiningen-style coordinate specifications."
+  [coord]
+  (string/split coord #"/" 2))
+
+(defn show [ctx args]
+  (println ">>" ctx args)
+  (if (< (count args) 2)
+    (do
+      (println "Missing coordinate argument." \newline "Usage: jarm show <coordinate>")
+      (System/exit 2))
+    (let [coord (second args)
+          artifact (parse-coordinate coord)
+          repo (repository/read-from-filesystem (:repository ctx))
+          versions (get-in repo artifact)]
+      (if (set? versions)
+        (println
+          (as-> [] $
+                (concat $ [coord
+                           (str "Group ID:    " (first artifact))
+                           (str "Artifact ID: " (second artifact))
+                           "Versions:"])
+                (concat $ (map (partial str "    ") versions))
+                (string/join \newline $)))
+        (do
+          (println "Artifact not found.")
+          (System/exit 2))))))
