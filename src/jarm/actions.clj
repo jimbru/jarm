@@ -31,7 +31,6 @@
   (string/split coord #"/" 2))
 
 (defn show [ctx args]
-  (println ">>" ctx args)
   (if (< (count args) 2)
     (do
       (println "Missing coordinate argument." \newline "Usage: jarm show <coordinate>")
