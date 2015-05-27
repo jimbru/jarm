@@ -1,7 +1,33 @@
 (ns jarm.actions
   (:refer-clojure :exclude [list])
-  (:require [clojure.string :as string]
-            [jarm.repository :as repository]))
+  (:require [cemerick.pomegranate.aether :as aether]
+            [clojure.string :as string]
+            [jarm.repository :as repository])
+  (:import [org.sonatype.aether.resolution DependencyResolutionException]))
+
+(defn- exit-coordinate-arg [action]
+  (println "Missing coordinate argument." \newline "Usage: jarm " action " <coordinate>")
+  (System/exit 2))
+
+(def repositories
+  [["central" {:url "https://repo1.maven.org/maven2/" :snapshots false}]
+   ["clojars" {:url "https://clojars.org/repo/"}]])
+
+(defn install [ctx args]
+  (if (= (count args) 3)
+    (try
+      (let [artifact (second args)
+            version (nth args 2)
+            coord [(symbol artifact) version]]
+        (aether/resolve-dependencies
+          :local-repo (:repository ctx)
+          :repositories repositories
+          :coordinates [coord]
+          :transfer-listener :stdout)
+        (println "Installed" coord))
+      (catch DependencyResolutionException e
+        (println (.getMessage e))))
+    (exit-coordinate-arg "install")))
 
 (defn- coordinate-str [group-id artifact-id version]
   (let [version-str (format " (%s)" version)]
@@ -32,9 +58,7 @@
 
 (defn show [ctx args]
   (if (< (count args) 2)
-    (do
-      (println "Missing coordinate argument." \newline "Usage: jarm show <coordinate>")
-      (System/exit 2))
+    (exit-coordinate-arg "show")
     (let [coord (second args)
           artifact (parse-coordinate coord)
           repo (repository/read-from-filesystem (:repository ctx))

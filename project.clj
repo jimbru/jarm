@@ -3,7 +3,8 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[ext "0.1.2"]
+  :dependencies [[com.cemerick/pomegranate "0.3.0"]
+                 [ext "0.1.2"]
                  [grimradical/clj-semver "0.3.0" :exclusions [org.clojure/clojure]]
                  [me.raynes/fs "1.4.6"]
                  [org.clojure/clojure "1.6.0"]
