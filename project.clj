@@ -4,6 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[com.cemerick/pomegranate "0.3.0" :exclusions [org.codehaus.plexus/plexus-utils]]
+                 [com.palletops/cli-cmds "0.1.1"]
                  [ext "0.1.2"]
                  [grimradical/clj-semver "0.3.0" :exclusions [org.clojure/clojure]]
                  [me.raynes/fs "1.4.6"]
